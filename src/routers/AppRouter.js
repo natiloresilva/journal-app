@@ -5,13 +5,14 @@ import {
     BrowserRouter as Router,
     Switch,
     Redirect
-} from "react-router-dom";
-import { getAuth, onAuthStateChanged } from '@firebase/auth';
-import { useDispatch } from 'react-redux';
-import { login } from '../actions/auth';
-import Loader from "react-loader-spinner";
-import { PrivateRoute } from './PrivateRoute';
-import { PublicRoute } from './PublicRoute';
+} from "react-router-dom"
+import { getAuth, onAuthStateChanged } from '@firebase/auth'
+import { useDispatch } from 'react-redux'
+import { login } from '../actions/auth'
+import Loader from "react-loader-spinner"
+import { PrivateRoute } from './PrivateRoute'
+import { PublicRoute } from './PublicRoute'
+import { startLoadingNotes } from '../actions/notes'
 
 export const AppRouter = () => {
 
@@ -23,11 +24,15 @@ export const AppRouter = () => {
 
     useEffect(() => {
         const auth = getAuth()
-        onAuthStateChanged(auth, (user) => {
-            console.log(user);
+        onAuthStateChanged(auth, async (user) => {
+            //console.log(user)
             if (user?.uid) {
+                // Al iniciar sesión, voy a recuperar los datos de mi usuario, sus notas y setear el estado en isLoggedIn en TRUE
                 dispatch(login(user.uid, user.displayName))
                 setIsLoggedIn(true)
+
+                dispatch(startLoadingNotes(user.uid))
+
             } else {
                 setIsLoggedIn(false)
             }
