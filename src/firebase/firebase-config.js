@@ -14,8 +14,22 @@ const firebaseConfig = {
     messagingSenderId: "511338472606",
     appId: "1:511338472606:web:5859bcf31d9f25258d878f"
 }
+//console.log(process.env)
 
-export const firebaseApp = initializeApp(firebaseConfig)
+const firebaseConfigTesting = {
+    apiKey: "AIzaSyAt9c5XhPEMtxWK3QggMrIj2qa3QvhLNcM",
+    authDomain: "testing-react-journal.firebaseapp.com",
+    projectId: "testing-react-journal",
+    storageBucket: "testing-react-journal.appspot.com",
+    messagingSenderId: "429551985718",
+    appId: "1:429551985718:web:b90866755ab62d20976497"
+};
+
+
+export const firebaseApp = (process.env.NODE_ENV === 'test') ? initializeApp(firebaseConfigTesting) : initializeApp(firebaseConfig)
+
+
+//export const firebaseApp = initializeApp(firebaseConfig)
 
 const db = getFirestore()
 const googleAuthProvider = new GoogleAuthProvider()
